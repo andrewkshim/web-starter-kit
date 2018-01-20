@@ -25,9 +25,19 @@ module.exports = {
       {
         test: /\.tsx?$/,
         include: path.resolve(__dirname, 'src'),
-        use: {
-          loader: 'ts-loader',
-        },
+        use: [
+          // Why is babel-loader here?
+          // https://github.com/gaearon/react-hot-loader/blob/dccd36e89a2f63d3c408c72fac753a230045418d/README.md#typescript
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: ['react-hot-loader/babel'],
+            }
+          },
+          {
+            loader: 'ts-loader',
+          }
+        ],
       },
     ],
   },
