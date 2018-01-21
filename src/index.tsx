@@ -1,17 +1,14 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-console.log('===== web-starter-kit =====');
-
-interface Props {
+interface IProps {
   message: string,
-};
+}
 
-interface State {};
-
-class App extends React.Component<Props, State> {
+class App extends React.Component<IProps, {}> {
   render() {
     const { message } = this.props;
+
     return (
       <h1>
         { message }
@@ -22,5 +19,5 @@ class App extends React.Component<Props, State> {
 
 ReactDOM.render(
   <App message='web-starter-kit' />,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
