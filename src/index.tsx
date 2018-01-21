@@ -1,11 +1,9 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 
-import App from './App'
-
-console.log('===== web-starter-kit =====');
+import App from './App';
 
 ReactDOM.render(
   <App message='web-starter-kit' />,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
