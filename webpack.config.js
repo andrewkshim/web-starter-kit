@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/index.tsx'),
@@ -19,6 +20,12 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
+
+  plugins: [
+    new webpack.WatchIgnorePlugin([
+      /css\.d\.ts$/,
+    ]),
+  ],
 
   module: {
     rules: [
