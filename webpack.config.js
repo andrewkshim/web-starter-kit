@@ -23,6 +23,30 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'typings-for-css-modules-loader',
+            options: {
+              importLoaders: 1,
+              modules: true,
+              namedExport: true,
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [
+                require('autoprefixer'),
+              ],
+            },
+          },
+        ],
+      },
+      {
         test: /\.tsx?$/,
         include: path.resolve(__dirname, 'src'),
         use: [
