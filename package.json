@@ -6,7 +6,9 @@
   "author": "Andrew Shim <andrewkshim92@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "./node_modules/.bin/webpack-dev-server --config webpack.config.js"
+    "start": "./node_modules/.bin/webpack-dev-server --config webpack.config.js",
+    "lint": "./node_modules/.bin/tslint --config tslint.json --project tsconfig.json src/**/*",
+    "lint:fix": "./node_modules/.bin/tslint --fix --config tslint.json --project tsconfig.json src/**/*"
   },
   "devDependencies": {
     "@types/react": "^16.0.34",
