@@ -23,9 +23,6 @@ module.exports = {
   },
 
   plugins: [
-    new webpack.WatchIgnorePlugin([
-      /css\.d\.ts$/,
-    ]),
     new ForkTypeScriptCheckerPlugin({
       tsconfig: path.resolve(__dirname, 'tsconfig.json'),
       tslint: path.resolve(__dirname, 'tslint.json'),
