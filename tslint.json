@@ -9,7 +9,6 @@
       "ignore-params",
       "ignore-properties"
     ],
-    "no-magic-numbers": true,
     "no-namespace": true,
     "no-non-null-assertion": true,
     "no-parameter-reassignment": true,
