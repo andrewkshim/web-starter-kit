@@ -1,5 +1,5 @@
-import * as React from 'react'
-import { hot } from 'react-hot-loader'
+import * as React from 'react';
+import { hot } from 'react-hot-loader';
 
 interface IProps {
   message: string,
@@ -8,6 +8,7 @@ interface IProps {
 class App extends React.Component<IProps, {}> {
   render() {
     const { message } = this.props;
+
     return (
       <h1>
         { message }
