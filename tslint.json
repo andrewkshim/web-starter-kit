@@ -14,7 +14,7 @@
     "no-parameter-reassignment": true,
     "no-reference": true,
     "no-unnecessary-type-assertion": true,
-    "only-arrow-functions": true,
+    "only-arrow-functions": false,
     "promise-function-async": true,
     "typedef": true,
     "typedef-whitespace": [

@@ -1,44 +1,60 @@
 import { Reducer } from 'redux';
 
-enum ActionType {
+enum CounterActionType {
   INCREMENT,
   DECREMENT,
 }
 
-export interface IState {
+export interface ICounterState {
   value: number,
 }
 
-export interface IAction {
-  type: ActionType;
+export interface ICounterAction {
+  type: CounterActionType;
 }
 
-export type ActionCreator = () => IAction;
+export interface ILabeledCounterAction {
+  type: string;
+  inner: ICounterAction;
+}
 
-export const increment: () => IAction =
-  () => ({ type: ActionType.INCREMENT });
+export type ActionCreator = () => ILabeledCounterAction;
 
-export const decrement: () => IAction =
-  () => ({ type: ActionType.DECREMENT });
+export const COUNTER_TYPE = 'COUNTER_TYPE';
 
-const DEFAULT_STATE = { value: 0 };
+const makeActionCreator: (actionCreator: () => ICounterAction) => ActionCreator =
+  (actionCreator) => () => ({
+    inner: actionCreator(),
+    type: COUNTER_TYPE,
+  });
+
+export const increment: ActionCreator =
+  makeActionCreator(() => ({
+    type: CounterActionType.INCREMENT,
+  }));
+
+export const decrement: ActionCreator =
+  makeActionCreator(() => ({
+    type: CounterActionType.DECREMENT,
+  }));
+
+export const DEFAULT_COUNTER_STATE = { value: 0 };
 
 const reducers = {
-  [ActionType.INCREMENT]: (state: IState): IState => ({
+  [CounterActionType.INCREMENT]: (state: ICounterState): ICounterState => ({
     value: state.value + 1,
   }),
-  [ActionType.DECREMENT]: (state: IState): IState => ({
+  [CounterActionType.DECREMENT]: (state: ICounterState): ICounterState => ({
     value: state.value - 1,
   }),
 };
 
-const reducer: Reducer<IState, IAction> = (
-  state: IState = DEFAULT_STATE,
-  action: IAction,
+export const reducer: Reducer<ICounterState, ICounterAction> = (
+  state: ICounterState = DEFAULT_COUNTER_STATE,
+  action: ICounterAction,
 ) => (
   !reducers[action.type]
     ? state
     : reducers[action.type](state)
 );
 
-export default reducer;
