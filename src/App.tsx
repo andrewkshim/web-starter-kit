@@ -10,17 +10,25 @@ import { IState } from './dux/index';
 import compose from './utils/compose';
 
 import {
-  ActionCreator,
+  CounterActionCreator,
   decrement,
   increment,
 } from './dux/counter';
 
+import {
+  TextActionCreator,
+  updateText,
+} from './dux/text';
+
 interface IProps {
   counter: number;
   message: string;
+  text: string;
 
-  decrement: ActionCreator;
-  increment: ActionCreator;
+  decrement: CounterActionCreator;
+  increment: CounterActionCreator;
+
+  updateText: TextActionCreator;
 }
 
 const enhance = compose(
@@ -28,10 +36,12 @@ const enhance = compose(
   connect(
     (state: IState) => ({
       counter: state.counter.value,
+      text: state.text.value,
     }),
     {
       decrement,
       increment,
+      updateText,
     },
   ),
 );
@@ -40,9 +50,11 @@ class App extends React.Component<IProps, {}> {
   render() {
     const {
       counter,
-      message,
-      increment,
       decrement,
+      increment,
+      message,
+      text,
+      updateText,
     } = this.props;
 
     return (
@@ -52,6 +64,15 @@ class App extends React.Component<IProps, {}> {
           { counter }
           <button onClick={() => increment()}>INCREMENT</button>
           <button onClick={() => decrement()}>DECREMENT</button>
+          <input
+            type='text'
+            value={ text }
+            onChange={(ev) => {
+              updateText({
+                text: ev.target.value,
+              });
+            }}
+          />
         </div>
       </h1>
     );

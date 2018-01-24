@@ -1,44 +1,44 @@
-import { Reducer } from 'redux';
+export const COUNTER_TYPE = 'COUNTER_TYPE';
 
 enum CounterActionType {
   INCREMENT,
   DECREMENT,
 }
 
-export interface ICounterState {
-  value: number,
-}
-
-export interface ICounterAction {
+interface ICounterAction {
   type: CounterActionType;
 }
+
+type CounterAction = ICounterAction | undefined;
 
 export interface ILabeledCounterAction {
   type: string;
   inner: ICounterAction;
 }
 
-export type ActionCreator = () => ILabeledCounterAction;
+export type CounterActionCreator = () => ILabeledCounterAction;
 
-export const COUNTER_TYPE = 'COUNTER_TYPE';
+export interface ICounterState {
+  value: number,
+}
 
-const makeActionCreator: (actionCreator: () => ICounterAction) => ActionCreator =
+type CounterState = ICounterState | undefined;
+
+const makeActionCreator: (actionCreator: () => ICounterAction) => CounterActionCreator =
   (actionCreator) => () => ({
     inner: actionCreator(),
     type: COUNTER_TYPE,
   });
 
-export const increment: ActionCreator =
+export const increment: CounterActionCreator =
   makeActionCreator(() => ({
     type: CounterActionType.INCREMENT,
   }));
 
-export const decrement: ActionCreator =
+export const decrement: CounterActionCreator =
   makeActionCreator(() => ({
     type: CounterActionType.DECREMENT,
   }));
-
-export const DEFAULT_COUNTER_STATE = { value: 0 };
 
 const reducers = {
   [CounterActionType.INCREMENT]: (state: ICounterState): ICounterState => ({
@@ -49,12 +49,20 @@ const reducers = {
   }),
 };
 
-export const reducer: Reducer<ICounterState, ICounterAction> = (
-  state: ICounterState = DEFAULT_COUNTER_STATE,
-  action: ICounterAction,
-) => (
-  !reducers[action.type]
-    ? state
-    : reducers[action.type](state)
-);
+const DEFAULT_COUNTER_STATE = { value: 0 };
+
+export const reducer = (
+  state: CounterState = DEFAULT_COUNTER_STATE,
+  action: CounterAction = undefined,
+) => {
+  if (state === undefined) {
+    return state;
+  } else if (action === undefined) {
+    return state;
+  } else if (reducers[action.type]) {
+    return reducers[action.type](state);
+  }
+
+  return state;
+};
 

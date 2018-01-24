@@ -6,14 +6,12 @@ import {
 
 import {
   COUNTER_TYPE,
-  DEFAULT_COUNTER_STATE,
   ICounterState,
   ILabeledCounterAction,
   reducer as counterReducer,
 } from './counter';
 
 import {
-  DEFAULT_TEXT_STATE,
   ILabeledTextAction,
   ITextState,
   TEXT_TYPE,
@@ -46,8 +44,8 @@ function isTextAction(action: Action): action is ILabeledTextAction {
 }
 
 const DEFAULT_STATE = {
-  counter: DEFAULT_COUNTER_STATE,
-  text: DEFAULT_TEXT_STATE,
+  counter: counterReducer(),
+  text: textReducer(),
 };
 
 const reducer: Reducer<State, Action> = (
