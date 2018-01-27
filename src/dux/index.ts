@@ -1,7 +1,7 @@
+import { Record } from 'immutable';
+
 import {
   Action as ReduxAction,
-  Reducer,
-  Store as ReduxStore,
 } from 'redux';
 
 import {
@@ -23,7 +23,7 @@ export interface IState {
   text: TextState;
 }
 
-type State = IState | undefined;
+type State = Record<IState>;
 
 type LabeledAction =
   | ILabeledCounterAction
@@ -33,8 +33,6 @@ type Action =
   | LabeledAction
   | ReduxAction;
 
-export type Store = ReduxStore<State, Action, never>;
-
 function isCounterAction(action: Action): action is ILabeledCounterAction {
   return (action as ILabeledCounterAction).type === COUNTER_TYPE;
 }
@@ -43,25 +41,25 @@ function isTextAction(action: Action): action is ILabeledTextAction {
   return (action as ILabeledTextAction).type === TEXT_TYPE;
 }
 
-const DEFAULT_STATE = {
+const makeState: Record.Factory<IState> = Record({
   counter: counterReducer(),
   text: textReducer(),
-};
+});
 
-const reducer: Reducer<State, Action> = (
-  state: State = DEFAULT_STATE,
+const reducer = (
+  state: (State | undefined) = makeState(),
   action: Action,
-) => {
+): State => {
   if (isCounterAction(action)) {
-    return {
-      ...state,
-      counter: counterReducer(state.counter, action.inner),
-    };
+    return state.update(
+      'counter',
+      (counter) => counterReducer(counter, action.inner),
+    );
   } else if (isTextAction(action)) {
-    return {
-      ...state,
-      text: textReducer(state.text, action.inner),
-    };
+    return state.update(
+      'text',
+      (text) => textReducer(text, action.inner),
+    );
   }
 
   return state;
