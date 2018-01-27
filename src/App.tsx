@@ -35,8 +35,8 @@ const enhance = compose(
   hot(module),
   connect(
     (state: IState) => ({
-      counter: state.counter.value,
-      text: state.text.value,
+      counter: state.counter.get('value', 0),
+      text: state.text.get('value', ''),
     }),
     {
       decrement,

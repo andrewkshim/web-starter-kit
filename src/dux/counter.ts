@@ -1,3 +1,5 @@
+import { Record } from 'immutable';
+
 export const COUNTER_TYPE = 'COUNTER_TYPE';
 
 enum CounterActionType {
@@ -8,8 +10,6 @@ enum CounterActionType {
 interface ICounterAction {
   type: CounterActionType;
 }
-
-type CounterAction = ICounterAction | undefined;
 
 export interface ILabeledCounterAction {
   type: string;
@@ -22,7 +22,7 @@ export interface ICounterState {
   value: number,
 }
 
-type CounterState = ICounterState | undefined;
+export type CounterState = Record<ICounterState>;
 
 const makeActionCreator: (actionCreator: () => ICounterAction) => CounterActionCreator =
   (actionCreator) => () => ({
@@ -41,19 +41,21 @@ export const decrement: CounterActionCreator =
   }));
 
 const reducers = {
-  [CounterActionType.INCREMENT]: (state: ICounterState): ICounterState => ({
-    value: state.value + 1,
-  }),
-  [CounterActionType.DECREMENT]: (state: ICounterState): ICounterState => ({
-    value: state.value - 1,
-  }),
+  [CounterActionType.INCREMENT]: (state: CounterState): CounterState => (
+    state.update('value', (value) => value + 1)
+  ),
+  [CounterActionType.DECREMENT]: (state: CounterState): CounterState => (
+    state.update('value', (value) => value - 1)
+  ),
 };
 
-const DEFAULT_COUNTER_STATE = { value: 0 };
+const makeCounterState: Record.Factory<ICounterState> = Record({
+  value: 0,
+});
 
 export const reducer = (
-  state: CounterState = DEFAULT_COUNTER_STATE,
-  action: CounterAction = undefined,
+  state: (CounterState | undefined) = makeCounterState(),
+  action: (ICounterAction | undefined) = undefined,
 ) => {
   if (state === undefined) {
     return state;

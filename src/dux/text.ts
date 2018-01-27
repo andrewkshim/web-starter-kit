@@ -1,3 +1,5 @@
+import { Record } from 'immutable';
+
 export const TEXT_TYPE = 'TEXT_TYPE';
 
 enum TextActionType {
@@ -16,8 +18,6 @@ interface ITextAction {
   type: TextActionType;
 }
 
-type TextAction = ITextAction | undefined;
-
 export interface ILabeledTextAction {
   type: string;
   inner: ITextAction;
@@ -29,7 +29,7 @@ export interface ITextState {
   value: string,
 }
 
-type TextState = ITextState | undefined;
+export type TextState = Record<ITextState>;
 
 const makeActionCreator: (actionCreator: (payload: Payload) => ITextAction) => TextActionCreator =
   (actionCreator) => (payload) => ({
@@ -44,16 +44,18 @@ export const updateText: TextActionCreator =
   }));
 
 const reducers = {
-  [TextActionType.UPDATE]: (state: ITextState, action: ITextAction): ITextState => ({
-    value: action.payload.text,
-  }),
+  [TextActionType.UPDATE]: (state: TextState, action: ITextAction): TextState => (
+    state.set('value', action.payload.text)
+  ),
 };
 
-const DEFAULT_TEXT_STATE: ITextState = { value: '' };
+const makeTextState: Record.Factory<ITextState> = Record({
+  value: '',
+});
 
 export const reducer = (
-  state: TextState = DEFAULT_TEXT_STATE,
-  action: TextAction = undefined,
+  state: (TextState | undefined) = makeTextState(),
+  action: (ITextAction | undefined) = undefined,
 ) => {
   if (state === undefined) {
     return state;

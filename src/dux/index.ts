@@ -6,21 +6,21 @@ import {
 
 import {
   COUNTER_TYPE,
-  ICounterState,
+  CounterState,
   ILabeledCounterAction,
   reducer as counterReducer,
 } from './counter';
 
 import {
   ILabeledTextAction,
-  ITextState,
   TEXT_TYPE,
+  TextState,
   reducer as textReducer,
 } from './text';
 
 export interface IState {
-  counter: ICounterState;
-  text: ITextState;
+  counter: CounterState;
+  text: TextState;
 }
 
 type State = IState | undefined;
