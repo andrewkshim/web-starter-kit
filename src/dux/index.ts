@@ -1,8 +1,5 @@
 import { Record } from 'immutable';
-
-import {
-  Action as ReduxAction,
-} from 'redux';
+import { Action as ReduxAction } from 'redux';
 
 import {
   COUNTER_TYPE,
@@ -12,22 +9,23 @@ import {
 } from './counter';
 
 import {
+  IRouteAction,
+  ROUTE_TYPE,
+  RouteState,
+  routeReducer,
+} from './route';
+
+import {
   ILabeledTextAction,
   TEXT_TYPE,
   TextState,
   reducer as textReducer,
 } from './text';
 
-export interface IState {
-  counter: CounterState;
-  text: TextState;
-}
-
-type State = Record<IState>;
-
 type LabeledAction =
   | ILabeledCounterAction
-  | ILabeledTextAction;
+  | ILabeledTextAction
+  | IRouteAction;
 
 type Action =
   | LabeledAction
@@ -41,10 +39,24 @@ function isTextAction(action: Action): action is ILabeledTextAction {
   return (action as ILabeledTextAction).type === TEXT_TYPE;
 }
 
+function isRouteAction(action: Action): action is IRouteAction {
+  return (action as IRouteAction).type === ROUTE_TYPE;
+}
+
+export interface IState {
+  counter: CounterState;
+  route: RouteState;
+  text: TextState;
+}
+
 const makeState: Record.Factory<IState> = Record({
   counter: counterReducer(),
+  route: routeReducer(),
   text: textReducer(),
 });
+
+
+type State = Record<IState>;
 
 const reducer = (
   state: (State | undefined) = makeState(),
@@ -59,6 +71,11 @@ const reducer = (
     return state.update(
       'text',
       (text) => textReducer(text, action.inner),
+    );
+  } else if (isRouteAction(action)) {
+    return state.update(
+      'route',
+      (route) => routeReducer(route, action),
     );
   }
 

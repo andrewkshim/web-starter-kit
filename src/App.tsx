@@ -16,6 +16,12 @@ import {
 } from './dux/counter';
 
 import {
+  RouteActionCreator,
+  RouteLocation,
+  pushRoute,
+} from './dux/route';
+
+import {
   TextActionCreator,
   updateText,
 } from './dux/text';
@@ -24,9 +30,12 @@ interface IProps {
   counter: number;
   message: string;
   text: string;
+  location: RouteLocation;
 
   decrement: CounterActionCreator;
   increment: CounterActionCreator;
+
+  pushRoute: RouteActionCreator;
 
   updateText: TextActionCreator;
 }
@@ -36,11 +45,13 @@ const enhance = compose(
   connect(
     (state: IState) => ({
       counter: state.counter.get('value', 0),
+      location: state.route.location,
       text: state.text.get('value', ''),
     }),
     {
       decrement,
       increment,
+      pushRoute,
       updateText,
     },
   ),
@@ -52,7 +63,9 @@ class App extends React.Component<IProps, {}> {
       counter,
       decrement,
       increment,
+      location,
       message,
+      pushRoute,
       text,
       updateText,
     } = this.props;
@@ -73,6 +86,11 @@ class App extends React.Component<IProps, {}> {
               });
             }}
           />
+        </div>
+        Location: { location.pathname }
+        <div>
+          <button onClick={() => pushRoute('/foo')}>foo</button>
+          <button onClick={() => pushRoute('/bar')}>bar</button>
         </div>
       </h1>
     );
