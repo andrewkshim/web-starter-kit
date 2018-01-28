@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { graphql } from 'react-apollo';
+import gql from 'graphql-tag';
 
 // @ts-ignore: react-hot-loader@4.0 does not have typings right now
 import { hot } from 'react-hot-loader';
@@ -26,11 +28,23 @@ import {
   updateText,
 } from './dux/text';
 
+interface ITodo {
+  id: string;
+  text: string;
+}
+
+interface IQueryResponse {
+  allTodoes: ITodo[];
+}
+
+type QueryResponse = IQueryResponse | undefined;
+
 interface IProps {
   counter: number;
+  location: RouteLocation;
   message: string;
   text: string;
-  location: RouteLocation;
+  todos: ITodo[];
 
   decrement: CounterActionCreator;
   increment: CounterActionCreator;
@@ -40,8 +54,31 @@ interface IProps {
   updateText: TextActionCreator;
 }
 
+const TodosQuery = gql`
+  query {
+    allTodoes {
+      id
+      text
+    }
+  }
+`;
+
+const getTodos = (data: QueryResponse): ITodo[] => (
+  (data && data.allTodoes)
+    ? data.allTodoes
+    : []
+);
+
 const enhance = compose(
   hot(module),
+  graphql<QueryResponse>(
+    TodosQuery,
+    {
+      props: ({ data }) => ({
+        todos: getTodos(data),
+      }),
+    },
+  ),
   connect(
     (state: IState) => ({
       counter: state.counter.get('value', 0),
@@ -67,6 +104,7 @@ class App extends React.Component<IProps, {}> {
       message,
       pushRoute,
       text,
+      todos,
       updateText,
     } = this.props;
 
@@ -92,6 +130,13 @@ class App extends React.Component<IProps, {}> {
           <button onClick={() => pushRoute('/foo')}>foo</button>
           <button onClick={() => pushRoute('/bar')}>bar</button>
         </div>
+        {
+          todos.map((todo) => (
+            <div key={todo.id}>
+              {todo.text}
+            </div>
+          ))
+        }
       </h1>
     );
   }
