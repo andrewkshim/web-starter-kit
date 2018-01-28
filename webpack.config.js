@@ -2,7 +2,7 @@ const ForkTypeScriptCheckerPlugin = require('fork-ts-checker-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = {
+module.exports = (env) => ({
   entry: path.resolve(__dirname, 'src/index.tsx'),
 
   output: {
@@ -24,6 +24,9 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.DefinePlugin({
+      GRAPHCOOL_URI: JSON.stringify(env.GRAPHCOOL_URI),
+    }),
     new ForkTypeScriptCheckerPlugin({
       tsconfig: path.resolve(__dirname, 'tsconfig.json'),
       tslint: path.resolve(__dirname, 'tslint.json'),
@@ -75,4 +78,5 @@ module.exports = {
       },
     ],
   },
-};
+});
+
