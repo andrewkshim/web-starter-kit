@@ -5,6 +5,12 @@
     "alwaysStrict": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
+    "lib": [
+      "DOM",
+      "ES5",
+      "ScriptHost",
+      "esnext.asynciterable"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
