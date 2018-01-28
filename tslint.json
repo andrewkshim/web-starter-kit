@@ -142,12 +142,6 @@
       "check-whitespace"
     ],
     "one-variable-per-declaration": true,
-    "ordered-imports": [
-      true,
-      {
-        "named-imports-order": "lowercase-last"
-      }
-    ],
     "prefer-function-over-method": true,
     "prefer-method-signature": true,
     "prefer-template": true,
