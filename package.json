@@ -9,9 +9,9 @@
     "start": "./node_modules/.bin/webpack-dev-server --config webpack.config.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.35",
-    "@babel/preset-env": "^7.0.0-beta.35",
-    "@babel/preset-react": "^7.0.0-beta.35",
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.0.0-beta.51",
+    "@babel/preset-react": "^7.0.0-beta.51",
     "babel-loader": "8.0.0-beta.0",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.9.7"
